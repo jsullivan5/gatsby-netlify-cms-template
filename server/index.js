@@ -22,28 +22,28 @@ app.get('/', (req, res) => {
 // Start Oauth exampl ------------------------------------------
 const simpleOauthModule = require('simple-oauth2')
 const randomstring = require('randomstring')
-const oauth_provider = process.env.OAUTH_PROVIDER || 'github'
-const login_auth_target = process.env.AUTH_TARGET || '_self'
+const oauth_provider = config.oauthProvider
+const login_auth_target = config.loginAuthTarget
 
 const oauth2 = simpleOauthModule.create({
   client: {
-    id: process.env.OAUTH_CLIENT_ID,
-    secret: process.env.OAUTH_CLIENT_SECRET
+    id: config.clientId,
+    secret: config.clientSecret,
   },
   auth: {
     // Supply GIT_HOSTNAME for enterprise github installs.
-    tokenHost: process.env.GIT_HOSTNAME || 'https://github.com',
-    tokenPath: process.env.OAUTH_TOKEN_PATH || '/login/oauth/access_token',
-    authorizePath: process.env.OAUTH_AUTHORIZE_PATH || '/login/oauth/authorize'
+    tokenHost: config.gitHostname,
+    tokenPath: config.tokenPath,
+    authorizePath: config.authorizePath,
   }
 })
 
 // Authorization uri definition
 const authorizationUri = oauth2.authorizationCode.authorizeURL({
-  redirect_uri: process.env.REDIRECT_URL,
-  scope: process.env.SCOPES || 'repo,user',
+  redirect_uri: config.redirectUrl,
+  scope: config.scope,
   state: randomstring.generate(32)
-})
+});
 
 // Initial page redirecting to Github
 app.get('/auth', (req, res) => {
