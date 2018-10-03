@@ -4,6 +4,7 @@
   "description": "server for pe client",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -12,6 +13,7 @@
   "author": "James Sullivan",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^6.0.0",
     "express": "^4.16.3"
   }
 }
