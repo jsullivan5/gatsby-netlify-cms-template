@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-title: Making sense of the SCAA’s new Flavor Wheel
+title: Making sense of the SCAA’s new Flavor Wheel TESTING!
 date: 2016-12-17T15:04:10.000Z
 description: This is a test - Does this really update?!?!?
 tags:
