@@ -3,21 +3,11 @@ const simpleOauthModule = require('simple-oauth2');
 const config = require('../util/config');
 
 describe('AuthService', () => {
-  let authService;
-  let createStub;
-
-
   beforeEach(() => {
-    createStub = sinon
-      .stub(simpleOauthModule, 'create')
-      .returns({}) ;
-   
     authService = require('./auth.service');
   });
 
   afterEach(() => {
-    createStub.restore();
-
     authService = undefined;
   });
 
@@ -32,6 +22,10 @@ describe('AuthService', () => {
 
   describe('Class methods', () => {
     it('_getOauthClient should call create with args', () => {
+      const createStub = sinon
+        .stub(simpleOauthModule, 'create')
+        .returns({});
+
       authService._getOauthClient();
       sinon.assert.calledWith(createStub, {
         client: {
@@ -43,7 +37,19 @@ describe('AuthService', () => {
           tokenPath: config.tokenPath,
           authorizePath: config.authorizePath
         }
-      })
+      });
+
+      createStub.restore();
+    });
+    it('should call getTokens with options argument', () => {
+      const mockOptions = { some: 'options' };
+      authService.oauth2.authorizationCode.getToken = sinon.stub();
+      const getTokenStub = authService.oauth2.authorizationCode.getToken;
+ 
+      authService._getToken(mockOptions);
+
+      sinon.assert.calledOnce(getTokenStub);
+      expect(getTokenStub.getCall(0).args[0]).to.equal(mockOptions);
     });
   });
 });
