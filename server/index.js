@@ -18,6 +18,12 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.use((err, req, res, next) => {
+  logger.error(error);
+  res.status(err.status || 500)
+    .send(err.message || 'Internal Server Error');
+})
+
 app.listen(config.port, () => {
   logger.info(`PE server is listening on port ${config.port}`);
 });

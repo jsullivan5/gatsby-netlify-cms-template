@@ -4,16 +4,24 @@ const authService = require('../services/auth.service');
 const router = express.Router();
 
 // Initial page redirecting to Github
-router.get('/', (req, res) => {
-  const authorizationUri = authService.getAuthorizationUri();
-  res.redirect(authorizationUri);
+router.get('/', (req, res, next) => {
+  try {
+    const authorizationUri = authService.getAuthorizationUri();
+    return res.redirect(authorizationUri);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Callback service parsing the authorization token and asking for the access token
-router.get('/callback', (req, res) => {
-  const { code } = req.query;
-  const successScript = authService.authorize(code);
-  return res.send(successScript);
+router.get('/callback', (req, res, next) => {
+  try {
+    const { code } = req.query;
+    const successScript = authService.authorize(code);
+    return res.send(successScript);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
