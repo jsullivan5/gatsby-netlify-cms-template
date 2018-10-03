@@ -1,4 +1,5 @@
 const simpleOauthModule = require('simple-oauth2');
+const randomstring = require('randomstring');
 
 const config = require('../util/config');
 
@@ -50,6 +51,31 @@ describe('AuthService', () => {
 
       sinon.assert.calledOnce(getTokenStub);
       expect(getTokenStub.getCall(0).args[0]).to.equal(mockOptions);
+    });
+    it('should call getAuthorizationUri with arguments', () => {
+      const randomstringStub = sinon.stub(randomstring, 'generate').returns('1');
+      authService.oauth2.authorizationCode.authorizeURL = sinon.stub();
+      const authorizeURLStub = authService.oauth2.authorizationCode.authorizeURL;
+ 
+      authService.getAuthorizationUri();
+
+      sinon.assert.calledOnce(randomstringStub);
+      sinon.assert.calledOnce(authorizeURLStub);
+      sinon.assert.calledWith(authorizeURLStub, {
+        redirect_uri: config.redirectUrl,
+        scope: config.scope,
+        state: '1'
+      });
+    });
+    it('should call _getTokens with options', () => {
+      const _getTokenStub = sinon.stub(authService, '_getToken');
+      const mockCode = 'super secret';
+      
+      authService.authorize(mockCode);
+
+      sinon.assert.calledWith(_getTokenStub, { code: mockCode });
+
+      _getTokenStub.restore();
     });
   });
 });
