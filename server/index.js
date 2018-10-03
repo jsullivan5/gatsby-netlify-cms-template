@@ -6,7 +6,7 @@ const path = require('path');
 const logger = require('./util/logger');
 const config = require('./util/config');
 
-const authRoute = require('./routes/authenticate.route');
+const authRoute = require('./routes/auth.route');
 
 const app = express();
 
