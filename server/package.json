@@ -1,0 +1,17 @@
+{
+  "name": "pe-server",
+  "version": "1.0.0",
+  "description": "server for pe client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pe"
+  ],
+  "author": "James Sullivan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
