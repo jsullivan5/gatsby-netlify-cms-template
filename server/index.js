@@ -3,10 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 
-const logger = require('./util/logger');
-const config = require('./util/config');
+const logger = require('./api/util/logger');
+const config = require('./api/util/config');
 
-const authRoute = require('./routes/auth.route');
+const authRoute = require('./api/routes/auth.route');
 
 const app = express();
 
