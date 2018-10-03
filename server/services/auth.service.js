@@ -26,6 +26,52 @@ class AuthService {
     });
   }
 
+  _getToken(options) {
+    return this.oauth2.authorizationCode.getToken(
+      options,
+      (error, result) => {
+        let mess, content;
+
+        if (error) {
+          logger.error('Access Token Error', error.message);
+          mess = 'error';
+          content = JSON.stringify(error);
+        } else {
+          const token = this.oauth2.accessToken.create(result);
+          mess = 'success';
+          content = {
+            token: token.token.access_token,
+            provider: this.oauth_provider
+          };
+        }
+
+        const successScript = `
+        <script>
+        (function() {
+          function recieveMessage(e) {
+            console.log("recieveMessage %o", e)
+            // send message to main window with da router
+            window.opener.postMessage(
+              'authorization:${
+                this.oauth_provider
+              }:${mess}:${JSON.stringify(content)}',
+              e.origin
+            )
+          }
+          window.addEventListener("message", recieveMessage, false)
+          // Start handshare with parent
+          console.log("Sending message: %o", "${this.oauth_provider}")
+          window.opener.postMessage("authorizing:${
+            this.oauth_provider
+          }", "*")
+          })()
+        </script>`;
+
+        return successScript;
+      }
+    );
+  }
+
   getAuthorizationUri() {
     return this.oauth2.authorizationCode.authorizeURL({
       redirect_uri: config.redirectUrl,
@@ -44,42 +90,7 @@ class AuthService {
       options.redirect_uri = process.env.REDIRECT_URL;
     }
 
-    return oauth2.authorizationCode.getToken(options, (error, result) => {
-      let mess, content;
-
-      if (error) {
-        logger.error('Access Token Error', error.message);
-        mess = 'error';
-        content = JSON.stringify(error);
-      } else {
-        const token = oauth2.accessToken.create(result);
-        mess = 'success';
-        content = {
-          token: token.token.access_token,
-          provider: this.oauth_provider
-        };
-      }
-
-      const successScript = `
-        <script>
-        (function() {
-          function recieveMessage(e) {
-            console.log("recieveMessage %o", e)
-            // send message to main window with da router
-            window.opener.postMessage(
-              'authorization:${this.oauth_provider}:${mess}:${JSON.stringify(content)}',
-              e.origin
-            )
-          }
-          window.addEventListener("message", recieveMessage, false)
-          // Start handshare with parent
-          console.log("Sending message: %o", "${this.oauth_provider}")
-          window.opener.postMessage("authorizing:${this.oauth_provider}", "*")
-          })()
-        </script>`;
-
-      return successScript;
-    });
+    return this._getToken(options);
   }
 }
 

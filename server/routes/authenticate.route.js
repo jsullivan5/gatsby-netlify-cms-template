@@ -16,8 +16,4 @@ router.get('/callback', (req, res) => {
   return res.send(successScript);
 });
 
-router.get('/success', (req, res) => {
-  res.send('');
-});
-
 module.exports = router;
