@@ -1,5 +1,20 @@
 # Gatsby + Netlify CMS Starter
 
+## Objective
+
+This project builds on top of the gatsby-netlify-cms-template and adds a server.  The server is meant to be used in a production environment to Oauth against github to allow use of Netlify CMS without any external services but github.
+
+The api also serves the staic files generated from the gatsby build.
+
+To start development:
+```gatsby develop```
+
+To test the server and Oauth:
+```cd to project root```
+```npm run build```
+```cd server dir```
+```npm start```
+
 **Note:** This starter uses the [Gatsby v2 Beta](https://www.gatsbyjs.org/blog/2018-06-16-announcing-gatsby-v2-beta-launch/).
 
 This repo contains an example business website that is built with [Gatsby](https://www.gatsbyjs.org/), and [Netlify CMS](https://www.netlifycms.org): **[Demo Link](https://gatsby-netlify-cms.netlify.com/)**.
